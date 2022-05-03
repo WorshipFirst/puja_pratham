@@ -9,6 +9,14 @@ mongoose.connect(process.env.DB_URL,{useNewUrlParser:true}).then(()=>{
 }).catch(err=>{
     console.log(err);
 });
+const userRoute = require("./route/userRoute");
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.json());
+app.use(express.static("./public"));
+
+app.use("/user",userRoute);
+
 const port = process.env.PORT || 3000;
 app.listen(port,()=>{
     console.log("Server is running or port : " + port);
