@@ -4,7 +4,7 @@ const path = require("path");
 const fastsms = require("fast-two-sms");
 const nodemailer = require("nodemailer");
 const jwt = require('jsonwebtoken');
-const {validationResult} = require("express-validator");
+const { validationResult } = require("express-validator");
 const storage = new Storage({
     projectId: "worship-first",
     keyFilename: "puja-pratham-firebase-adminsdk-wvbyq-6349c2ef49.json"
@@ -14,8 +14,8 @@ const bucketName = "gs://puja-pratham.appspot.com";
 
 exports.loginBySocialMedia = async (request, response) => {
     const errors = validationResult(request);
-    if(!errors.isEmpty())
-      return response.status(401).json({errors: errors.array()});
+    if (!errors.isEmpty())
+        return response.status(401).json({ errors: errors.array() });
     var user = await userModel.findOne({ email: request.body.email });
     if (!user) {
         userModel.create({
@@ -34,105 +34,108 @@ exports.loginBySocialMedia = async (request, response) => {
         if (user.image == " ") {
             let payload = { subject: user._id };
             let token = jwt.sign(payload, 'fdfdvcvrerejljjjjl');
-            user = await userModel.findOneAndUpdate({email:request.body.email},{$set : {
-                image:request.body.image
-            }},{new:true});
-            return response.status(200).json({user : user,token : token});
+            user = await userModel.findOneAndUpdate({ email: request.body.email }, {
+                $set: {
+                    image: request.body.image
+                }
+            }, { new: true });
+            return response.status(200).json({ user: user, token: token });
         }
         else {
             let payload = { subject: user._id };
             let token = jwt.sign(payload, 'fdfdvcvrerejljjjjl');
-            return response.status(200).json({user : user,token : token});
+            return response.status(200).json({ user: user, token: token });
         }
     }
 }
 
-exports.update = (request,response) =>{
+exports.update = (request, response) => {
     let image;
-    if(request.file){
+    if (request.file) {
         image = "https://firebasestorage.googleapis.com/v0/b/puja-pratham.appspot.com/o/" + request.file.filename + "?alt=media&token=hello";
     }
-    else{
+    else {
         image = request.body.oldImage;
     }
     userModel.findOneAndUpdate(
-        {email:request.body.email},
-        {$set:{
-            name:request.body.name,
-            image:image,
-            address:request.body.address
-        }
-    },{new:true}).then(result=>{
-        return response.status(200).json({user:result});
-    }).catch(err=>{
-        return response.status(500).json({error:"Internal Server Error"});
-    });
+        { email: request.body.email },
+        {
+            $set: {
+                name: request.body.name,
+                image: image,
+                address: request.body.address
+            }
+        }, { new: true }).then(result => {
+            return response.status(200).json({ user: result });
+        }).catch(err => {
+            return response.status(500).json({ error: "Internal Server Error" });
+        });
 }
 
-exports.forgetPassword = async (request,response) =>{
-    userModel.findOne({email:request.params.email})
-    .then(data=>{
-        if(data){
-            let password = '';
-            var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@!#$%^&*';
-            var charactersLength = characters.length;
-            for (var i = 0; i < 6; i++) {
-                password += characters.charAt(Math.floor(Math.random() * charactersLength));
-            }
-            userModel.updateOne({ email: request.params.email }, {
-                $set: {
-                    password: password
+exports.forgetPassword = async (request, response) => {
+    userModel.findOne({ email: request.params.email })
+        .then(data => {
+            if (data) {
+                let password = '';
+                var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@!#$%^&*';
+                var charactersLength = characters.length;
+                for (var i = 0; i < 6; i++) {
+                    password += characters.charAt(Math.floor(Math.random() * charactersLength));
                 }
-            }).then(result => {
-                if(result.modifiedCount == 1){
-                    let fromMail = "worship.first01@gmail.com";
-                    let toMail = data.email;
-                    let subject = "New Password For Puja Pratham";
-                    let message = "Yor Password for puja pratham site is " + password;
+                userModel.updateOne({ email: request.params.email }, {
+                    $set: {
+                        password: password
+                    }
+                }).then(result => {
+                    if (result.modifiedCount == 1) {
+                        let fromMail = "worship.first01@gmail.com";
+                        let toMail = data.email;
+                        let subject = "New Password For Puja Pratham";
+                        let message = "Yor Password for puja pratham site is " + password;
 
-                    const transporter = nodemailer.createTransport({
-                        service: 'gmail',
-                        auth: {
-                            user: fromMail,
-                            pass: 'worship@123!'
-                        }
-                    });
+                        const transporter = nodemailer.createTransport({
+                            service: 'gmail',
+                            auth: {
+                                user: fromMail,
+                                pass: 'worship@123!'
+                            }
+                        });
 
-                    // email options
-                    let mailOptions = {
-                        from: fromMail,
-                        to: toMail,
-                        subject: subject,
-                        text: message
-                    };
+                        // email options
+                        let mailOptions = {
+                            from: fromMail,
+                            to: toMail,
+                            subject: subject,
+                            text: message
+                        };
 
-                    transporter.sendMail(mailOptions, (error, res) => {
-                        if (error) {
-                            console.log(error);
-                            res.send("Something went wrong");
-                        }
-                        else {
-                            return response.status(200).json({message:"New Password Has Been Sent Sucessfully To The Above Email ID"});
-                        }
-                    });
+                        transporter.sendMail(mailOptions, (error, res) => {
+                            if (error) {
+                                console.log(error);
+                                res.send("Something went wrong");
+                            }
+                            else {
+                                return response.status(200).json({ message: "New Password Has Been Sent Sucessfully To The Above Email ID" });
+                            }
+                        });
                     }
                 }).catch(err => {
                     console.log(err);
                     return response.status(500).json({ err: "Internal Server Error!" });
                 })
             }
-            else{
-                return response.status(404).json({message:"You are not valid user"});
+            else {
+                return response.status(404).json({ message: "You are not valid user" });
             }
-    }).catch(err=>{
-        return response.status(404).json({err:"Internal Server Error"});
-    })
+        }).catch(err => {
+            return response.status(404).json({ err: "Internal Server Error" });
+        })
 }
 
 exports.add = (request, response) => {
     const errors = validationResult(request);
-    if(!errors.isEmpty())
-      return response.status(401).json({errors: errors.array()});
+    if (!errors.isEmpty())
+        return response.status(401).json({ errors: errors.array() });
     let image;
     if (!request.file)
         image = " ";
@@ -163,7 +166,7 @@ exports.add = (request, response) => {
         }
         fastsms.sendMessage(option).then((res) => {
 
-            return response.status(201).json({ message: "OTP SEND SUCCESSFULLY" });
+            return response.status(201).json({ user: result });
         });
     }).catch(err => {
         console.log(err);
@@ -173,8 +176,8 @@ exports.add = (request, response) => {
 
 exports.registerByOtp = (request, response) => {
     const errors = validationResult(request);
-    if(!errors.isEmpty())
-      return response.status(401).json({errors: errors.array()});
+    if (!errors.isEmpty())
+        return response.status(401).json({ errors: errors.array() });
     userModel.findOne({ _id: request.body.id, otp: request.body.otp })
         .then(data => {
             var password = '';
@@ -231,15 +234,18 @@ exports.registerByOtp = (request, response) => {
 
 exports.login = (request, response) => {
     const errors = validationResult(request);
-    if(!errors.isEmpty())
-      return response.status(401).json({errors: errors.array()});
+    if (!errors.isEmpty())
+        return response.status(401).json({ errors: errors.array() });
     userModel.findOne({
         email: request.body.email,
         password: request.body.password
     }).then(result => {
-        let payload = { subject: result._id };
-        let token = jwt.sign(payload, 'fdfdvcvrerejljjjjl');
-        return response.status(200).json({ user: result, token: token });
+        if (result) {
+            let payload = { subject: result._id };
+            let token = jwt.sign(payload, 'fdfdvcvrerejljjjjl');
+            return response.status(200).json({ user: result, token: token });
+        }
+        return response.status(200).json({ message: "You are not valid user" });
     }).catch(err => {
         console.log(err);
         return response.status(500).json(err);
@@ -255,16 +261,16 @@ exports.view = (request, response) => {
         })
 }
 
-exports.delete = (request,response)=>{
-    userModel.findOneAndDelete({email:request.params.email})
-    .then(result=>{
-        if(result){
-            return response.status(202).json({message:"Success"});
-        }
-        return response.status(204).json(result);
-    }).catch(err=>{
-        return response.status(500).json({error:"Internal Server Error!"});
-    });
+exports.delete = (request, response) => {
+    userModel.findOneAndDelete({ email: request.params.email })
+        .then(result => {
+            if (result) {
+                return response.status(202).json({ message: "Success" });
+            }
+            return response.status(204).json(result);
+        }).catch(err => {
+            return response.status(500).json({ error: "Internal Server Error!" });
+        });
 }
 
 const uploadFile = async (filename) => {
