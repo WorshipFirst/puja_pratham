@@ -74,23 +74,6 @@ exports.update = (request, response) => {
         });
 }
 
-
-exports.forgetPassword = async (request,response) =>{
-    userModel.findOne({email:request.params.email})
-    .then(data=>{
-
-
-        if(data){
-            let password = '';
-            var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@!#$%^&*';
-            var charactersLength = characters.length;
-            for (var i = 0; i < 6; i++) {
-                password += characters.charAt(Math.floor(Math.random() * charactersLength));
-            }
-            userModel.updateOne({ email: request.params.email }, {
-                $set: {
-                    password: password
-
 exports.forgetPassword = async (request, response) => {
     userModel.findOne({ email: request.params.email })
         .then(data => {
@@ -100,7 +83,6 @@ exports.forgetPassword = async (request, response) => {
                 var charactersLength = characters.length;
                 for (var i = 0; i < 6; i++) {
                     password += characters.charAt(Math.floor(Math.random() * charactersLength));
- 5c924fa99518fc58b36c1109ca2ba806618c65ea
                 }
                 userModel.updateOne({ email: request.params.email }, {
                     $set: {
