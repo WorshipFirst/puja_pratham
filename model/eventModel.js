@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const productSchema = new mongoose.Schema({
+const eventSchema = new mongoose.Schema({
     name:{
         type:String,
         required:true,
@@ -12,11 +12,7 @@ const productSchema = new mongoose.Schema({
     },
     catId : {
         type : Schema.Types.ObjectId,
-        ref : "categories"
-    },
-    stock : {
-        type : Number,
-        required : true
+        ref : "eventCategories"
     },
     price : {
         type : Number,
@@ -26,21 +22,21 @@ const productSchema = new mongoose.Schema({
         type : String,
         required : true
     },
-    keywords : {
-        type : String,
-        required : true
-    },
     comments : [{
         message : String,
         date:{
-            type : Date,
+            type : date,
             default:Date.now()
         },
         userId : {
             type : Schema.Types.ObjectId,
             ref : "users"
         }
-    }]
+    }],
+    byWhom :{
+        type:String,
+        required:true
+    }
 });
 
-module.exports = mongoose.model("products",productSchema);
+module.exports = mongoose.model("events",eventSchema);
