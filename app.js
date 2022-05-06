@@ -21,7 +21,6 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 app.use(express.static("./public"));
 
-const userRoute = require("./route/userRoute");
 const cartRoute = require("./route/cartRoute");
 const orderRoute = require("./route/orderRoute");
 
