@@ -33,7 +33,7 @@ const productSchema = new mongoose.Schema({
     comments : [{
         message : String,
         date:{
-            type : date,
+            type : Date,
             default:Date.now()
         },
         userId : {

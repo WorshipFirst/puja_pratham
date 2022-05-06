@@ -30,4 +30,4 @@ const media = new mongoose.Schema({
 
 });
 
-module.exports = mongoose.model("MediaCategories",mediaCategories);
+module.exports = mongoose.model("Media",media);
