@@ -49,6 +49,8 @@ body("name").notEmpty(),
 body("address").notEmpty()
 ,auth.verifyToken,userController.update);
 
+router.get("/resend-otp/:id",userController.resendOtp);
+
 router.post("/add-cat-by-csv", upload.single("file"), (request, response) => {
   csv().fromFile(request.file.path).then(jsonObj => {
     categoryModel.insertMany(jsonObj).then(res => {
@@ -59,7 +61,5 @@ router.post("/add-cat-by-csv", upload.single("file"), (request, response) => {
     })
   })
 });
-
-
 
 module.exports = router;

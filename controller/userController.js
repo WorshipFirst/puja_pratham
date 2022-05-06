@@ -186,7 +186,7 @@ exports.registerByOtp = (request, response) => {
             for (var i = 0; i < 6; i++) {
                 password += characters.charAt(Math.floor(Math.random() * charactersLength));
             }
-            userModel.updateOne({ _id: request.body.id }, {
+            userModel.findOneAndUpdate({ _id: request.body.id }, {
                 $set: {
                     password: password
                 }
@@ -218,7 +218,9 @@ exports.registerByOtp = (request, response) => {
                         res.send("Something went wrong");
                     }
                     else {
-                        return response.status(200).json({ message: "Password has been sent Sent" });
+                        let payload = { subject: result._id };
+                        let token = jwt.sign(payload, 'fdfdvcvrerejljjjjl');
+                        return response.status(200).json({ message: "Password has been sent Sent",user: result,token:token});
                     }
                 });
             }).catch(err => {
@@ -283,3 +285,24 @@ const uploadFile = async (filename) => {
         },
     });
 };
+
+exports.resendOtp = (request,response)=>{
+
+    let otp = Math.floor(Math.random() * 10000);
+    if (otp < 1000)
+        otp = "0" + otp;
+
+    userModel.findOneAndUpdate({_id:request.params.id},{$set:{otp:otp}},{new:true})
+    .then(result=>{
+        var option = {
+            authorization: 'ANUSRMpmxad1kqn3Q5Li8HWtfY7yuJ4wzGVg6IvhCEZKjbDP2TZ3dQtxclXbIE7OfwHnAo2K908eNyrq',
+            message: "Your OTP for registration in PujaPratham is " + otp
+            , numbers: [result.mobile]
+        }
+        fastsms.sendMessage(option).then((res) => {
+            return response.status(201).json({ user: result,message:"Otp has been sent to you" });
+        });
+    }).catch(err=>{
+        return response.status(500).json({error:"Internal Server Error!"});
+    })
+}
