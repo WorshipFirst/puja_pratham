@@ -9,13 +9,19 @@ mongoose.connect(process.env.DB_URL,{useNewUrlParser:true}).then(()=>{
 }).catch(err=>{
     console.log(err);
 });
-const userRoute = require("./route/userRoute");
+
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 app.use(express.static("./public"));
 
+const userRoute = require("./route/userRoute");
+const cartRoute = require("./route/cartRoute");
+const orderRoute = require("./route/orderRoute");
+
 app.use("/user",userRoute);
+app.use("/cart",cartRoute);
+app.use("/order",orderRoute);
 
 const port = process.env.PORT || 3000;
 app.listen(port,()=>{

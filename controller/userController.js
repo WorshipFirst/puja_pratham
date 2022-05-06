@@ -22,11 +22,13 @@ exports.loginBySocialMedia = async (request, response) => {
             email: request.body.email,
             name: request.body.name,
             image: request.body.image
-        }).then(result => {
+        })
+        .then(result => {
             let payload = { subject: result._id };
             let token = jwt.sign(payload, 'fdfdvcvrerejljjjjl');
             return response.status(200).json({ user: result, token: token });
-        }).catch(err => {
+        })
+        .catch(err => {
             return response.status(500).json({ error: "Internal Server Error!" });
         })
     }
@@ -39,7 +41,7 @@ exports.loginBySocialMedia = async (request, response) => {
             }},{new:true});
             return response.status(200).json({user : user,token : token});
         }
-        else {
+    else {
             let payload = { subject: user._id };
             let token = jwt.sign(payload, 'fdfdvcvrerejljjjjl');
             return response.status(200).json({user : user,token : token});
@@ -72,6 +74,8 @@ exports.update = (request,response) =>{
 exports.forgetPassword = async (request,response) =>{
     userModel.findOne({email:request.params.email})
     .then(data=>{
+
+
         if(data){
             let password = '';
             var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@!#$%^&*';
