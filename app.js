@@ -15,6 +15,8 @@ const productCategoryRoute = require("./route/categoryRoute")
 const productRoute = require("./route/productRoute")
 const mediafileCategoryRoute = require("./route/mediafileCategoryRoute");
 const  mediafileRoute = require("./route/mediafileRoute");
+const eventCategoryRoute = require("./route/eventCategoryRoute");
+const eventRoute = require("./route/eventRoute");
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended:true}));
@@ -31,6 +33,8 @@ app.use("/product-category", productCategoryRoute);
 app.use("/product", productRoute);
 app.use("/mediafile-category", mediafileCategoryRoute);
 app.use("/mediafile", mediafileRoute);
+app.use("/event-category",eventCategoryRoute);
+app.use("/event",eventRoute)
 
 
 const port = process.env.PORT || 3000;
