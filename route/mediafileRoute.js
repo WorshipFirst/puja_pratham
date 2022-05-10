@@ -20,7 +20,6 @@ body("link").notEmpty(),
 body("lyrics").notEmpty(),
 body("type").notEmpty(),
 body("catId").notEmpty(),
-
 mediafileController.add);
 
 route.get("/view", mediafileController.view);
