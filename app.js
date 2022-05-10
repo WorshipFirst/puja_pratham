@@ -17,6 +17,9 @@ const mediafileCategoryRoute = require("./route/mediafileCategoryRoute");
 const  mediafileRoute = require("./route/mediafileRoute");
 const eventCategoryRoute = require("./route/eventCategoryRoute");
 const eventRoute = require("./route/eventRoute");
+const templeroute = require("./route/templeRoute");
+const templePoojaroute = require("./route/templePoojaroute");
+
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended:true}));
@@ -35,6 +38,8 @@ app.use("/mediafile-category", mediafileCategoryRoute);
 app.use("/mediafile", mediafileRoute);
 app.use("/event-category",eventCategoryRoute);
 app.use("/event",eventRoute)
+app.use("/temple",templeroute)
+app.use("/templePooja",templePoojaroute)
 
 
 const port = process.env.PORT || 3000;
