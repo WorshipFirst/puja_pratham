@@ -5,6 +5,7 @@ const fastsms = require("fast-two-sms");
 const nodemailer = require("nodemailer");
 const jwt = require('jsonwebtoken');
 const { validationResult } = require("express-validator");
+const bcrypt = require("bcrypt");
 const storage = new Storage({
     projectId: "worship-first",
     keyFilename: "puja-pratham-firebase-adminsdk-wvbyq-6349c2ef49.json"
@@ -75,8 +76,10 @@ exports.update = (request, response) => {
 }
 
 exports.forgetPassword = async (request, response) => {
+    console.log(request.params.email);
     userModel.findOne({ email: request.params.email })
         .then(data => {
+            
             if (data) {
                 let password = '';
                 var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@!#$%^&*';
@@ -84,6 +87,8 @@ exports.forgetPassword = async (request, response) => {
                 for (var i = 0; i < 6; i++) {
                     password += characters.charAt(Math.floor(Math.random() * charactersLength));
                 }
+                // const salt = await bcrypt.genSalt(10);
+                // var password = await bcrypt.hash(pass, salt);
                 userModel.updateOne({ email: request.params.email }, {
                     $set: {
                         password: password
@@ -176,60 +181,66 @@ exports.add = (request, response) => {
     })
 }
 
-exports.registerByOtp = (request, response) => {
+exports.registerByOtp =  (request, response) => {
     const errors = validationResult(request);
     if (!errors.isEmpty())
         return response.status(401).json({ errors: errors.array() });
     userModel.findOne({ _id: request.body.id, otp: request.body.otp })
         .then(data => {
-            var password = '';
-            var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@!#$%^&*';
-            var charactersLength = characters.length;
-            for (var i = 0; i < 6; i++) {
-                password += characters.charAt(Math.floor(Math.random() * charactersLength));
-            }
-            userModel.findOneAndUpdate({ _id: request.body.id }, {
-                $set: {
-                    password: password
+            if(data){
+                var password = '';
+                var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@!#$%^&*';
+                var charactersLength = characters.length;
+                for (var i = 0; i < 6; i++) {
+                    password += characters.charAt(Math.floor(Math.random() * charactersLength));
                 }
-            }).then(result => {
-                let fromMail = "worship.first01@gmail.com";
-                let toMail = data.email;
-                let subject = "Password For Puja Pratham";
-                let message = "Yor Password for puja pratham site is " + password;
-
-                const transporter = nodemailer.createTransport({
-                    service: 'gmail',
-                    auth: {
-                        user: fromMail,
-                        pass: 'worship@123!'
+                // const salt = await bcrypt.genSalt(10);
+                // password = await bcrypt.hash(password,salt);
+                userModel.findOneAndUpdate({ _id: request.body.id }, {
+                    $set: {
+                        password: password
                     }
-                });
-
-                // email options
-                let mailOptions = {
-                    from: fromMail,
-                    to: toMail,
-                    subject: subject,
-                    text: message
-                };
-
-                transporter.sendMail(mailOptions, (error, res) => {
-                    if (error) {
-                        console.log(error);
-                        res.send("Something went wrong");
-                    }
-                    else {
-                        let payload = { subject: result._id };
-                        let token = jwt.sign(payload, 'fdfdvcvrerejljjjjl');
-                        return response.status(200).json({ message: "Password has been sent Sent",user: result,token:token});
-                    }
-                });
-            }).catch(err => {
-                console.log(err);
-                return response.status(500).json({ err: "Internal Server Error!" });
-            })
-
+                }).then(result => {
+                    let fromMail = "worship.first01@gmail.com";
+                    let toMail = data.email;
+                    let subject = "Password For Puja Pratham";
+                    let message = "Yor Password for puja pratham site is " + password;
+    
+                    const transporter = nodemailer.createTransport({
+                        service: 'gmail',
+                        auth: {
+                            user: fromMail,
+                            pass: 'worship@123!'
+                        }
+                    });
+    
+                    // email options
+                    let mailOptions = {
+                        from: fromMail,
+                        to: toMail,
+                        subject: subject,
+                        text: message
+                    };
+    
+                    transporter.sendMail(mailOptions, (error, res) => {
+                        if (error) {
+                            console.log(error);
+                            res.send("Something went wrong");
+                        }
+                        else {
+                            let payload = { subject: result._id };
+                            let token = jwt.sign(payload, 'fdfdvcvrerejljjjjl');
+                            return response.status(200).json({ message: "Password has been sent Sent",user: result,token:token});
+                        }
+                    });
+                }).catch(err => {
+                    console.log(err);
+                    return response.status(500).json({ err: "Internal Server Error!" });
+                })
+            }
+            else{
+                return response.status(200).json({error:"Invalid otp"});
+            }
         }).catch(err => {
             console.log(err);
             return response.status(500).json({ err: "Internal Server Error!" });
