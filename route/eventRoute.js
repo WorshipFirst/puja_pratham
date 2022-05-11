@@ -20,7 +20,6 @@ body("image").notEmpty(),
 body("catId").notEmpty(),
 body("price").notEmpty(),
 body("description").notEmpty(),
-body("byWhom").notEmpty(),
 eventController.add);
 
 router.get("/view",eventController.view);

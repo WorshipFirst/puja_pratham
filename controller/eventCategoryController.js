@@ -35,6 +35,7 @@ exports.add = (request, response) => {
         "https://firebasestorage.googleapis.com/v0/b/puja-pratham.appspot.com/o/" +
         request.file.filename +
         "?alt=media&token=hello",
+      type: request.body.type,
     })
     .then((result) => {
       uploadFile(
@@ -90,7 +91,8 @@ exports.update =  (request, response) => {
         { _id: request.body.id },{
           $set:{
           name: request.body.name,
-          image: image,
+          image:request.body.image,
+          type:request.body.type,
         }
       }).then((result) => {
         return response.status(200).json(result);
