@@ -39,7 +39,8 @@ exports.add = (request, response) => {
       stock: request.body.stock,
       description: request.body.description,
       catId: request.body.catId,
-      keywords: request.body.keywords, 
+      keywords: request.body.keywords,
+      discount: request.body.discount,
     })
     .then((result) => {
       uploadFile(
@@ -135,6 +136,7 @@ exports.edit = (request, response) => {
             description: request.body.description,
             catId: request.body.category,
             keywords: request.body.keywords,
+            discount: request.body.discount,
           },
         }
       )

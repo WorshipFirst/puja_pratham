@@ -14,7 +14,7 @@ var storages = multer.diskStorage({
 var upload = multer({ storage: storages });
 
 
-router.post("/add" , upload.single("image") ,
+router.post("/add" , upload.single("image"),
 body("name").notEmpty(),
 body("image").notEmpty(),
 body("catId").notEmpty(),

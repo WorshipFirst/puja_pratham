@@ -23,6 +23,7 @@ body("stock").notEmpty(),
 body("price").notEmpty(),
 body("description").notEmpty(),
 body("keywords").notEmpty(),
+body("discount").notEmpty(),
 productController.add);
 
 router.get("/view",productController.view);

@@ -40,7 +40,6 @@ const uploadFile = async (filename) => {
       price: request.body.price,
       description: request.body.description,
       catId: request.body.catId,
-      byWhom: request.body.byWhom,
       })
       .then((result) => {
         uploadFile(
@@ -100,7 +99,6 @@ exports.view = (request, response) => {
           catId: request.body.id,
           price: request.body.price,
           description: request.body.description,
-          byWhom: request.body.byWhom,
           oldImage: request.body.oldImage,
           id: request.body.id,
         }

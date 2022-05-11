@@ -33,10 +33,6 @@ const eventSchema = new mongoose.Schema({
             ref : "users"
         }
     }],
-    byWhom :{
-        type:String,
-        required:true
-    }
 });
 
 module.exports = mongoose.model("events",eventSchema);

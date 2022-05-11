@@ -13,9 +13,10 @@ var storages = multer.diskStorage({
   
 var upload = multer({ storage: storages });
 
-router.post("/add" , upload.single("image") ,
+router.post("/add" , upload.single("image"),
 body("name").notEmpty(),
 body("image").notEmpty(),
+body("type").notEmpty(),
 eventCategoryController.add);
 
 router.get("/view",eventCategoryController.view)
@@ -24,6 +25,7 @@ router.post("/update",upload.single("image"),
 body("name").notEmpty(),
 body("image").notEmpty(),
 body("oldImage").notEmpty(),
+body("type").notEmpty(),
 eventCategoryController.update);
 
 router.delete("/delete/:id", eventCategoryController.deletebyid);

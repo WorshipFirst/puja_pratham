@@ -40,7 +40,12 @@ const productSchema = new mongoose.Schema({
             type : Schema.Types.ObjectId,
             ref : "users"
         }
-    }]
+    }],
+    discount : {
+        type : Number,
+        required : true
+    },
+
 });
 
 module.exports = mongoose.model("products",productSchema);
