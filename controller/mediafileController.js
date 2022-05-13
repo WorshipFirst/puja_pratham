@@ -46,7 +46,7 @@ exports.add = (request, response) => {
         "?alt=media&token=hello",
       type: request.body.type,
       link: request.body.link,
-      catId: request.body.id,
+      catId: request.body.catId,
       lyrics: request.body.lyrics,
     })
     .then((result) => {
@@ -119,7 +119,7 @@ exports.update = (request, response) => {
       {$set:{
         type: request.body.type,
         link: request.body.link,
-        catId: request.body.id,
+        catId: request.body.catId,
         name: request.body.name,
         lyrics: request.body.lyrics,
       }
