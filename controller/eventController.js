@@ -12,6 +12,14 @@ const storage = new Storage({
 
 const bucketName = "gs://puja-pratham.appspot.com";
 
+exports.viewOne = (request,response)=>{
+  eventModel.findOne({_id:request.params.id}).populate("catId")
+  .then(result=>{
+    return response.status(200).json(result);
+  }).catch(err=>{
+    return response.status(500).json({error:"Internal Server Error"})
+  });
+}
 
 const uploadFile = async (filename) => {
     storage.bucket(bucketName).upload(filename, {
@@ -140,7 +148,7 @@ exports.viewEventBycategoryId = (request, response) =>{
     if(!errors.isEmpty)
     return response.status(401).json({errors: errors.array()});
     eventModel
-    .findOne({ _id: request.body.id })
+    .findOne({catId: request.body.id })
     .then((result) => {
       return response.status(200).json(result);
     })
