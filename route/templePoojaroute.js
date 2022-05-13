@@ -36,6 +36,8 @@ body("catId").notEmpty(),
 body("id").notEmpty(),
 templePoojaController.update);
 
+router.get("/view-one/:id",templePoojaController.viewOne);
+
 router.post("/delete/:id",templePoojaController.deletebyid);
 
 router.post("/view-event-categoryId",body("id").notEmpty(), templePoojaController.viewEventBycategoryId);

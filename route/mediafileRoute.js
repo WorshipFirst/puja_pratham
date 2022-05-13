@@ -13,6 +13,8 @@ var storages = multer.diskStorage({
 });
 var upload = multer({ storage: storages });
 
+route.get("/view-one/:id",mediafileController.viewOne);
+
 route.post("/add", upload.single("image"),
 body("name").notEmpty(),
 body("image").notEmpty(),

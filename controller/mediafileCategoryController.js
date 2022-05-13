@@ -29,7 +29,6 @@ exports.add = (request, response) => {
   const errors = validationResult(request);
   if(!errors.isEmpty)
   return response.status(401).json({errors: errors.array()});
-  console.log(request.body);
   mediafile
     .create({
       name: request.body.name,
@@ -42,11 +41,9 @@ exports.add = (request, response) => {
       uploadFile(
         path.join(__dirname, "../", "public/images/") + request.file.filename
       );
-      console.log(result);
       return response.status(200).json(result);
     })
     .catch((err) => {
-      console.log(err);
       return response.status(500).json({ mesaage: "failed" });
     });
 };
@@ -55,13 +52,11 @@ exports.delete = (request, response) => {
   mediafile
     .deleteOne({ _id: request.params.id })
     .then((result) => {
-      console.log(result);
       if (result.deletedCount)
         return response.status(202).json({ mesaage: "delete success" });
       else return response.status(204).json({ mesaage: "not deleted" });
     })
     .catch((err) => {
-      console.log(err);
       return response.status(500).json({ mesaage: "failed" });
     });
 };
@@ -131,11 +126,9 @@ exports.view = (request, response) => {
   mediafile
     .find()
     .then((result) => {
-      console.log(result);
       return response.status(200).json(result);
     })
     .catch((err) => {
-      console.log(err);
       return response.status(500).json({ mesaage: "failed" });
     });
 };
