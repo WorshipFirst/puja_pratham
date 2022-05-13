@@ -58,7 +58,6 @@ exports.add = (request, response) => {
 exports.view = (request, response) =>{
     productModel
     .find()
-    .populate("catId")
     .then((result) => {
       return response.status(200).json(result);
     })
@@ -134,7 +133,7 @@ exports.edit = (request, response) => {
             stock: request.body.stock,
             price: request.body.price,
             description: request.body.description,
-            catId: request.body.category,
+            catId: request.body.catId,
             keywords: request.body.keywords,
             discount: request.body.discount,
           },

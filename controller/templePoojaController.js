@@ -39,7 +39,7 @@ const uploadFile = async (filename) => {
         "?alt=media&token=hello",
       price: request.body.price,
       description: request.body.description,
-      catId: request.body.id,
+      catId: request.body.catId,
       day: request.body.day,
       })
       .then((result) => {
@@ -96,7 +96,7 @@ exports.update = (request, response) =>{
       {$set:{
         name: request.body.name,
         image: request.body.image,
-        catId: request.body.id,
+        catId: request.body.catId,
         price: request.body.price,
         description: request.body.description,
         day: request.body.day,
@@ -141,7 +141,7 @@ exports.viewEventBycategoryId = (request, response) =>{
     if(!errors.isEmpty)
     return response.status(401).json({errors: errors.array()});
     templePoojaModel
-    .findOne({ _id: request.body.id })
+    .find({ _id: request.body.id })
     .then((result) => {
       return response.status(200).json(result);
     })
@@ -149,3 +149,17 @@ exports.viewEventBycategoryId = (request, response) =>{
       return response.status(500).json(err);
     });
 } 
+
+exports.viewOne = (request, response) =>{
+  const errors = validationResult(request);
+  if(!errors.isEmpty)
+  return response.status(401).json({errors: errors.array()});
+  templePoojaModel
+  .findOne({ _id: request.body.id })
+  .then((result) => {
+    return response.status(200).json(result);
+  })
+  .catch((err) => {
+    return response.status(500).json(err);
+  });
+}

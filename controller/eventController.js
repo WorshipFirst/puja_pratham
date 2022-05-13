@@ -96,7 +96,7 @@ exports.view = (request, response) => {
         {$set:{
           name: request.body.name,
           image: request.body.image,
-          catId: request.body.id,
+          catId: request.body.catId,
           price: request.body.price,
           description: request.body.description,
           oldImage: request.body.oldImage,
