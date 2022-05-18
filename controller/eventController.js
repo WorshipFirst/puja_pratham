@@ -148,7 +148,7 @@ exports.viewEventBycategoryId = (request, response) =>{
     if(!errors.isEmpty)
     return response.status(401).json({errors: errors.array()});
     eventModel
-    .findOne({catId: request.body.id })
+    .find({catId: request.body.id })
     .then((result) => {
       return response.status(200).json(result);
     })

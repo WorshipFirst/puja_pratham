@@ -17,6 +17,7 @@ exports.viewOne = (request,response)=>{
   .then(result=>{
     return response.status(200).json(result);
   }).catch(err=>{
+    console.log(err);
     return response.status(200).json(result);
   })
 }
@@ -158,16 +159,16 @@ exports.viewEventBycategoryId = (request, response) =>{
     });
 } 
 
-exports.viewOne = (request, response) =>{
-  const errors = validationResult(request);
-  if(!errors.isEmpty)
-  return response.status(401).json({errors: errors.array()});
-  templePoojaModel
-  .findOne({ _id: request.body.id })
-  .then((result) => {
-    return response.status(200).json(result);
-  })
-  .catch((err) => {
-    return response.status(500).json(err);
-  });
-}
+// exports.viewOne = (request, response) =>{
+//   const errors = validationResult(request);
+//   if(!errors.isEmpty)
+//   return response.status(401).json({errors: errors.array()});
+//   templePoojaModel
+//   .findOne({ _id: request.body.id })
+//   .then((result) => {
+//     return response.status(200).json(result);
+//   })
+//   .catch((err) => {
+//     return response.status(500).json(err);
+//   });
+// }
