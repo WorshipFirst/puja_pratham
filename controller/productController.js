@@ -171,7 +171,7 @@ exports.searchbByCatId = (request, response) =>{
         var flag = false;
         var data = [];
         for (product of result) {
-          console.log(product);
+          // console.log(product);
           if (product.catId.name == request.body.name) {
             flag = true;
             data.push(product);

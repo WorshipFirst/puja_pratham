@@ -13,6 +13,7 @@ var storages = multer.diskStorage({
     cb(null, Date.now() + "-" + file.originalname);
   },
 });
+
 var upload = multer({ storage: storages });
 
 router.post("/add", upload.single("image"),
@@ -34,6 +35,8 @@ router.post("/login",
 
 router.get("/view", auth.verifyToken, userController.view);
 
+router.get("/viewOne/:id",userController.viewOne)
+
 router.post("/login-by-social-media",
  body("email").notEmpty(),
  body("name").notEmpty(),
@@ -44,10 +47,7 @@ router.delete("/delete-account/:email",userController.delete);
 
 router.get("/forget-password/:email",userController.forgetPassword);
 
-router.post("/update-profile",upload.single("image"),
-body("name").notEmpty(),
-body("address").notEmpty()
-,auth.verifyToken,userController.update);
+router.post("/update-profile",upload.single("image"),userController.update);
 
 router.get("/resend-otp/:id",userController.resendOtp);
 
