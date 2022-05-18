@@ -57,12 +57,11 @@ exports.add = (request, response) => {
 
 exports.view = (request, response) =>{
     productModel
-    .find()
+    .find().populate("catId")
     .then((result) => {
       return response.status(200).json(result);
     })
     .catch((err) => {
-      console.log(err);
       return response.status(500).json({ message: "Something went wrong" });
     });
 }
@@ -171,7 +170,6 @@ exports.searchbByCatId = (request, response) =>{
         var flag = false;
         var data = [];
         for (product of result) {
-          console.log(product);
           if (product.catId.name == request.body.name) {
             flag = true;
             data.push(product);
@@ -181,7 +179,6 @@ exports.searchbByCatId = (request, response) =>{
         return response.status(200).json("No data Found");
       })
       .catch((err) => {
-        console.log(err);
         return response.status(500).json({ err: "Something went wrong" });
       });
     }
@@ -227,11 +224,9 @@ exports.viewCategoryId = (request, response) => {
     productModel
       .find({ catId: request.body.catId })
       .then((result) => {
-        console.log(result);
         return response.status(200).json(result);
       })
       .catch((err) => {
-        console.log(err);
         return response.status(500).json(err);
       });
     }
@@ -244,11 +239,9 @@ exports.viewProductId= (request, response) => {
         productModel
           .findOne({ _id: request.body._id })
           .then((result) => {
-            console.log(result);
             return response.status(200).json(result);
           })
           .catch((err) => {
-            console.log(err);
             return response.status(500).json(err);
           });
     }
