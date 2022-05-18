@@ -12,6 +12,15 @@ const storage = new Storage({
 
 const bucketName = "gs://puja-pratham.appspot.com";
 
+exports.viewOne = (request,response)=>{
+  templePoojaModel.findOne({_id:request.params.id}).populate("catId")
+  .then(result=>{
+    return response.status(200).json(result);
+  }).catch(err=>{
+    console.log(err);
+    return response.status(200).json(result);
+  })
+}
 
 const uploadFile = async (filename) => {
     storage.bucket(bucketName).upload(filename, {
@@ -141,7 +150,7 @@ exports.viewEventBycategoryId = (request, response) =>{
     if(!errors.isEmpty)
     return response.status(401).json({errors: errors.array()});
     templePoojaModel
-    .find({ _id: request.body.id })
+    .find({ catId: request.body.id })
     .then((result) => {
       return response.status(200).json(result);
     })
@@ -150,16 +159,16 @@ exports.viewEventBycategoryId = (request, response) =>{
     });
 } 
 
-exports.viewOne = (request, response) =>{
-  const errors = validationResult(request);
-  if(!errors.isEmpty)
-  return response.status(401).json({errors: errors.array()});
-  templePoojaModel
-  .findOne({ _id: request.body.id })
-  .then((result) => {
-    return response.status(200).json(result);
-  })
-  .catch((err) => {
-    return response.status(500).json(err);
-  });
-}
+// exports.viewOne = (request, response) =>{
+//   const errors = validationResult(request);
+//   if(!errors.isEmpty)
+//   return response.status(401).json({errors: errors.array()});
+//   templePoojaModel
+//   .findOne({ _id: request.body.id })
+//   .then((result) => {
+//     return response.status(200).json(result);
+//   })
+//   .catch((err) => {
+//     return response.status(500).json(err);
+//   });
+// }

@@ -13,11 +13,9 @@ exports.addToCart = async (request,response)=>{
 
  cart.save()
  .then((results)=>{
-   console.log(results);
    return response.status(201).json(results);
  })
  .catch((err)=>{
-   console.log(err);
    return response.status(500).json({ message : "Opps! Something went wrong"});
  });
 };
@@ -34,13 +32,12 @@ exports.viewCart =(request,response)=>{
 };
 
 exports.viewOne =(request,response)=>{
-    cartModel.findOne({ userId : request.body.userId})
+    cartModel.findOne({ userId : request.params.userId})
     .populate("productList")
     .then((result)=>{
       return response.status(200).json(result);
     })
     .catch((err)=>{
-      console.log(err);
       return response.status(500).json({message : "Opps! Something went wrong"});
     });
 };
@@ -53,13 +50,13 @@ exports.deleteProduct= async (request,response)=>{
         return response.status(200).json(result);
     })
     .catch(err=>{
-        console.log(err);
+      console.log(err);
         return response.status(500).json(err);
     });
 }
 
 exports.deleteCart =(request,response)=>{
-    cartModel.deleteOne({userId : request.params.userId})
+    cartModel.deleteOne({userId : request.params.id})
     .then(result=>{
         console.log(result);
         if(result.deletedCount)

@@ -19,7 +19,7 @@ const eventCategoryRoute = require("./route/eventCategoryRoute");
 const eventRoute = require("./route/eventRoute");
 const templeroute = require("./route/templeRoute");
 const templePoojaroute = require("./route/templePoojaroute");
-
+const bookEventRoute=require('./route/BookEventRoute');
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended:true}));
@@ -40,7 +40,7 @@ app.use("/event-category",eventCategoryRoute);
 app.use("/event",eventRoute)
 app.use("/temple",templeroute)
 app.use("/templePooja",templePoojaroute)
-
+app.use("/book-event",bookEventRoute);
 
 const port = process.env.PORT || 3000;
 app.listen(port,()=>{

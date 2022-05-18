@@ -199,13 +199,16 @@ exports.add = (request, response) => {
             );
         }
         var option = {
-            authorization: 'ANUSRMpmxad1kqn3Q5Li8HWtfY7yuJ4wzGVg6IvhCEZKjbDP2TZ3dQtxclXbIE7OfwHnAo2K908eNyrq',
+            authorization: 'jDkBLbZKXG3D8Dh3RpexwA6b7dJYp9xSPSdEck3ollHG3Sg7Eb4iyvhBgS91',
             message: "Your OTP for registration in PujaPratham is " + otp
             , numbers: [request.body.mobile]
         }
         fastsms.sendMessage(option).then((res) => {
-
+            console.log("success"+res);
             return response.status(201).json({ user: result });
+        }).catch(err=>{
+            console.log("failed"+err);
+            console.log(err);
         });
     }).catch(err => {
         console.log(err);
