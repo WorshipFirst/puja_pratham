@@ -6,7 +6,6 @@ const bookEventSchema=new mongoose.Schema({
     userId:{
         type :Schema.Types.ObjectId,
         ref:'users'
-       
     },
     event:{
        type:String,
@@ -52,10 +51,6 @@ const bookEventSchema=new mongoose.Schema({
        default:Date.now()
     },
     start_time:{
-        type:String,
-        required:true
-    },
-    end_time:{
         type:String,
         required:true
     },
