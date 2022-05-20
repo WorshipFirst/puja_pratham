@@ -12,4 +12,6 @@ route.get("/view-order",orderController.viewOrder);
 
 route.get("/view-one/:userId",orderController.viewOne);
 
+route.get("/view-orders/:userId",orderController.viewOrders);
+
 module.exports = route;

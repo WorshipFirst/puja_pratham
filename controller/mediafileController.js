@@ -62,7 +62,7 @@ exports.add = (request, response) => {
 
 exports.view = (request, response) => {
   mediafile
-    .find()
+    .find().populate("catId")
     .then((result) => {
       return response.status(200).json(result);
     })

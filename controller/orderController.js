@@ -77,3 +77,11 @@ exports.orderStatus = (request,response)=>{
       console.log(err);
   })
 }
+
+exports.viewOrders = (request,response)=>{
+  orderModel.find({userId:request.params.userId}).sort({date : -1}).then(result=>{
+    return response.status(200).json(result);
+  }).catch(err=>{
+    return response.status(500).json({message:"Something went wrong!"});
+  })
+}
