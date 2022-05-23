@@ -1,14 +1,20 @@
 const express = require("express");
+const mongoose = require("mongoose");
+require('dotenv').config();
+// var accountSid = process.env.accountSid ;
+// var authToken = process.env.authToken ;
 const app = express();
 const cors = require("cors");
 app.use(cors());
-require('dotenv').config();
-const mongoose = require("mongoose");
-mongoose.connect(process.env.DB_URL,{useNewUrlParser:true}).then(()=>{
+
+
+mongoose.connect(process.env.DB_URL ,{useNewUrlParser:true}).then(()=>{
     console.log("Database connected sucessfully");
 }).catch(err=>{
     console.log(err);
 });
+
+
 
 const userRoute = require("./route/userRoute");
 const productCategoryRoute = require("./route/categoryRoute")
@@ -41,6 +47,17 @@ app.use("/event",eventRoute)
 app.use("/temple",templeroute)
 app.use("/templePooja",templePoojaroute)
 app.use("/book-event",bookEventRoute);
+
+app.post("/message",(req,res)=>{
+console.log('this is the req');
+client.messages.create({
+   body: 'Pratham puja',
+   from: '+17179224972',
+   to: '+9197549 93047'
+ }).then(message => console.log(message.sid)).catch(err=>{
+     console.log(err);
+ });
+})
 
 const port = process.env.PORT || 3000;
 app.listen(port,()=>{
