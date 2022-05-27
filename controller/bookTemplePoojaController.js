@@ -1,27 +1,9 @@
-const bookeventModel=require('../model/BookEventModel');
 const Razorpay = require("razorpay");
-const BookEventModel = require('../model/BookEventModel');
+const BookTemplePooja = require("../model/BookTemplePooja");
 var instance = new Razorpay({ key_id: 'rzp_test_NPr7p2g2REFz6n', key_secret: '5IUWlT8W8DcE7AKSVYCDvV7O' })
+var client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_TOKEN);
 
-exports.bookNowOnCash=(request,response)=>{
-    bookeventModel.create({
-       userId:request.body.userId,
-        event:request.body.event,
-        mobile_no:request.body.mobile_no,
-        address:request.body.address,
-        booking_date:request.body.booking_date,
-        start_time:request.body.start_time,
-        amount:request.body.amount
-
-    }).then(result=>{
-         return response.status(200).json(result);
-    }).catch(err=>{
-        console.log(err);
-        return response.status(500).json({message:'Opps ! Something went wrong'});
-    })
-}
-
-exports.createOrder = (request,response)=>{
+exports.create = (request,response)=>{
     instance.orders.create({
         amount: 100,
         currency: "INR"
@@ -38,21 +20,29 @@ exports.createOrder = (request,response)=>{
 exports.orderStatus = (request,response)=>{
     instance.payments.fetch(request.body.response.razorpay_payment_id)
     .then(paymentDetails=>{
-        BookEventModel.create({
+        BookTemplePooja.create({
           userId : request.body.userId,
-          event : request.body.event,
-          mobile_no : request.body.mobile_no,
-          address : request.body.address,
+          templePooja : request.body.templePooja,
+          mobile : request.body.mobile,
           amount:request.body.amount,
-          payment_type : "Online Payment",
           transaction : paymentDetails.acquirer_data,
           order_id : paymentDetails.order_id,
           payment_method : paymentDetails.method,
-          booking_date : request.body.booking_date,
-          start_time : request.body.start_time 
+          beneficiary_name : request.body.beneficiary_name
         }).then(result=>{
+          if(request.body.comeStatus == 1){
+            let otp = Math.floor(Math.random() * 10000);
+            if (otp < 1000)
+                otp = "0" + otp;        
+            client.messages.create({
+                body: "Dear user you can Come in the Temple's garbh grah only after showing this code : " + otp ,
+                from: '+17179224972',
+                to: '+91'+request.body.mobile
+            })
+          }
           return response.status(200).json({message:"Pay success",order:result});
         }).catch(err=>{
+            console.log(err);
           return response.status(500).json({error:"Internal Server Error!"});
         })
     })

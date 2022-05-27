@@ -321,20 +321,6 @@ exports.viewOne = (request, response) => {
         })
 }
 
-exports.delete = (request, response) => {
-    userModel.findOneAndDelete({ email: request.params.email })
-        .then(result => {
-            if (result) {
-                return response.status(202).json({ message: "Success" });
-            }
-            return response.status(204).json(result);
-        }).catch(err => {
-            return response.status(500).json({ error: "Internal Server Error!" });
-        });
-}
-
-
-
 exports.resendOtp = (request, response) => {
 
     let otp = Math.floor(Math.random() * 10000);

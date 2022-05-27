@@ -35,7 +35,8 @@ router.post("/login",
 
 router.get("/view", auth.verifyToken, userController.view);
 
-router.get("/viewOne/:id",userController.viewOne)
+router.get("/viewOne/:id",auth.verifyToken,userController.viewOne);
+router.get("/view-one/:id",auth.verifyToken,userController.viewOne);
 
 router.post("/login-by-social-media",
  body("email").notEmpty(),
@@ -43,11 +44,9 @@ router.post("/login-by-social-media",
  body("image").notEmpty(),
  userController.loginBySocialMedia);
 
-router.delete("/delete-account/:email",userController.delete);
-
 router.get("/forget-password/:email",userController.forgetPassword);
 
-router.post("/update-profile",upload.single("image"),userController.update);
+router.post("/update-profile",upload.single("image"),auth.verifyToken,userController.update);
 
 router.get("/resend-otp/:id",userController.resendOtp);
 
@@ -61,6 +60,5 @@ router.post("/add-cat-by-csv", upload.single("file"), (request, response) => {
     })
   })
 });
-
 
 module.exports = router;
