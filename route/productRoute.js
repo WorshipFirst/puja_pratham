@@ -71,4 +71,6 @@ router.post("/view-productid",
 body("_id").notEmpty(),
 productController.viewProductId);
 
+router.post("/add-rating-and-comment",productController.addRatting);
+
 module.exports = router;
