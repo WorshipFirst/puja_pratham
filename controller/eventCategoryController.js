@@ -4,6 +4,7 @@ const path = require("path");
 const requests = require("request");
 const { response } = require("express");
 const {validationResult} = require ("express-validator");
+const eventModel = require("../model/eventModel");
 
 const storage = new Storage({
     projectId: "worship-first",
@@ -66,7 +67,6 @@ exports.update =  (request, response) => {
     if(!errors.isEmpty)
     return response.status(401).json({errors: errors.array()});
     let image;
-    console.log(request.body);
     if (request.file) {
       image =
         "https://firebasestorage.googleapis.com/v0/b/puja-pratham.appspot.com/o/" +
@@ -91,10 +91,11 @@ exports.update =  (request, response) => {
         { _id: request.body.id },{
           $set:{
           name: request.body.name,
-          image:request.body.image,
+          image:image,
           type:request.body.type,
         }
       }).then((result) => {
+        console.log(result);
         return response.status(200).json(result);
       }).catch((err) => {
         return response.status(500).json(err);
@@ -113,7 +114,11 @@ exports.deletebyid = (request, response) =>{
       },
       method: "DELETE",
     });
-    return response.status(200).json(result);
+    eventModel.deleteMany({catId : request.params.id}).then(result=>{
+      return response.status(200).json(result);
+    }).catch(err=>{
+      return response.status(500).json(err);
+    })
   })
   .catch((err) => {
     return response.status(500).json(err);

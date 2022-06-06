@@ -40,6 +40,16 @@ exports.viewOne = (request,response)=>{
     });
 };
 
+exports.viewByOrderId = (request,response)=>{
+  orderModel.findOne({_id : request.params.orderId}).populate("productList.product")
+  .then(result=>{
+      return response.status(200).json(result);
+  })
+  .catch(err=>{
+      return response.status(500).json(err);
+  });
+};
+
 exports.create = (request,response)=>{
   instance.orders.create({
       amount: 100,
@@ -79,7 +89,7 @@ exports.orderStatus = (request,response)=>{
 }
 
 exports.viewOrders = (request,response)=>{
-  orderModel.find({userId:request.params.userId}).sort({date : -1}).then(result=>{
+  orderModel.find({userId:request.params.userId}).sort({date : -1}).populate("productList.product").then(result=>{
     return response.status(200).json(result);
   }).catch(err=>{
     return response.status(500).json({message:"Something went wrong!"});

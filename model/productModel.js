@@ -39,7 +39,8 @@ const productSchema = new mongoose.Schema({
         userId : {
             type : Schema.Types.ObjectId,
             ref : "users"
-        }
+        },
+        ratting : Number
     }],
     discount : {
         type : Number,

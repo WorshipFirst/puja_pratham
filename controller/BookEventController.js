@@ -1,4 +1,3 @@
-const { response } = require('express');
 const bookeventModel=require('../model/BookEventModel');
 const Razorpay = require("razorpay");
 const BookEventModel = require('../model/BookEventModel');

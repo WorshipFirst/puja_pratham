@@ -4,6 +4,7 @@ const path = require("path");
 const requests = require("request");
 const { response } = require("express");
 const {validationResult} = require ("express-validator");
+const productModel = require("../model/productModel");
 
 const storage = new Storage({
     projectId: "worship-first",
@@ -64,7 +65,6 @@ exports.edit =  (request, response) => {
     if(!errors.isEmpty)
     return response.status(401).json({errors: errors.array()});
     let image;
-    console.log(request.body);
     if (request.file) {
       image =
         "https://firebasestorage.googleapis.com/v0/b/puja-pratham.appspot.com/o/" +
@@ -100,6 +100,7 @@ exports.edit =  (request, response) => {
 }
 
 exports.deletebyid = (request, response) =>{
+
     productCategoryModel
     .findByIdAndDelete({ _id: request.params.id })
     .then((result) => {
@@ -110,7 +111,12 @@ exports.deletebyid = (request, response) =>{
         },
         method: "DELETE",
       });
-      return response.status(200).json(result);
+      productModel.deleteMany({catId : request.params.id}).then(result=>{
+        return response.status(200).json({status:"Deleted",delete:true});
+      }).catch(err=>{
+        console.log(err);
+        return response.status(500).json(err);
+      })
     })
     .catch((err) => {
       return response.status(500).json(err);

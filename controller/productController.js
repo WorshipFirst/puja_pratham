@@ -245,3 +245,23 @@ exports.viewProductId= (request, response) => {
             return response.status(500).json(err);
           });
     }
+exports.addRatting = (request,response)=>{
+  productModel.updateOne({_id : request.body.productId},{
+    $set : {
+      comments:{
+        ratting : request.body.ratting,
+        userId : request.body.userId,
+        message : request.body.message
+      }
+    }
+  }).then(result=>{
+    console.log(result);
+    if(result.modifiedCount == 1){
+      return response.status(200).json({result:"Ratting Updated..."});
+    }else{
+      return response.status(200).json({result:"Ratting Not Updated..."});
+    }
+  }).catch(err=>{
+    return response.status(500).json({err});
+  })
+}
