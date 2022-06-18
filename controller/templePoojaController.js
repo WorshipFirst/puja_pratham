@@ -55,7 +55,7 @@ const uploadFile = async (filename) => {
         uploadFile(
           path.join(__dirname, "../", "public/images/") + request.file.filename
         );
-        return response.status(201).json(result);
+        return response.status(201).json({result:result});
       })
       .catch((err) => {
         return response.status(500).json(err);
@@ -65,7 +65,7 @@ const uploadFile = async (filename) => {
   
 exports.view = (request, response) => {
   templePoojaModel
- .find()
+ .find().populate("catId")
  .then((result) => {
    return response.status(200).json(result);
  })
@@ -80,6 +80,7 @@ exports.update = (request, response) =>{
   if(!errors.isEmpty)
   return response.status(401).json({errors: errors.array()});
   let image;
+  console.log(request.body);
   if (request.file) {
     image =
       "https://firebasestorage.googleapis.com/v0/b/puja-pratham.appspot.com/o/" +
@@ -98,19 +99,21 @@ exports.update = (request, response) =>{
     });
   } else {
     image = request.body.oldImage;
+    
   }
   templePoojaModel
     .updateOne(
       { _id: request.body.id },
       {$set:{
         name: request.body.name,
-        image: request.body.image,
+        image: image,
         catId: request.body.catId,
         price: request.body.price,
         description: request.body.description,
         day: request.body.day,
-        oldImage: request.body.oldImage,
-        id: request.body.id,
+        // oldImage: request.body.oldImage,
+        // id: request.body.id,
+        
       }
     }
     )
@@ -137,7 +140,7 @@ exports.deletebyid = (request, response) =>{
       },
       method: "DELETE",
     });
-    return response.status(200).json(result);
+    return response.status(200).json({result:result});
   })
   .catch((err) => {
     return response.status(500).json(err);
