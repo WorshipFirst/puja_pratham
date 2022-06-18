@@ -20,7 +20,7 @@ exports.placeOrder =(request,response)=>{
 };
 
 exports.viewOrder =(request,response)=>{
-  orderModel.find().populate("productList.product")
+  orderModel.find().populate("productList.product").sort({date:-1})
   .then(results=>{
       return response.status(200).json(results);
   })

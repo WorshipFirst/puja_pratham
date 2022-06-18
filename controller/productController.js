@@ -4,6 +4,8 @@ const path = require("path");
 const requests = require("request");
 const { response } = require("express");
 const {validationResult} = require ("express-validator");
+const mediaModel = require("../model/MediaModel");
+const eventModel = require("../model/eventModel");
 
 const storage = new Storage({
     projectId: "worship-first",
@@ -264,4 +266,28 @@ exports.addRatting = (request,response)=>{
   }).catch(err=>{
     return response.status(500).json({err});
   })
+}
+
+exports.searchAll = (request,response) =>{
+  productModel.find({ keywords: { $regex: request.body.keywords, $options: "i" } })
+  .then((product) => {
+    mediaModel.find({ keywords: { $regex: request.body.keywords, $options: "i" } })
+    .then(media=>{
+      eventModel.find({ keywords: { $regex: request.body.keywords, $options: "i" } })
+      .then(event=>{
+        let products = product;
+        products.push(media);
+        products.push(event);
+        return response.status(200).json(products);
+      }).catch(err=>{
+        return response.status(500).json(err);
+      })
+    }).catch(err=>{
+      return response.status(500).json(err);
+    })
+    // return response.status(200).json(product);
+  })
+  .catch((err) => {
+    return response.status(500).json(err);
+  });
 }

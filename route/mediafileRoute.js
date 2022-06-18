@@ -43,4 +43,6 @@ mediafileController.update);
 
 route.get("/view-by-type/:type",mediafileController.viewByType);
 
+route.post("/update-catId",mediafileController.updateCatId);
+
 module.exports = route;

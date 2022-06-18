@@ -160,3 +160,15 @@ exports.viewByCat = (request,response)=>{
     return response.status(500).json({message:"Something went wrong"});
   })
 }
+
+exports.updateCatId = (request,response)=>{
+  mediafile.updateMany({catId : request.body.catId},
+    {
+      $set : { catId : request.body.id}
+    }
+  ).then(result=>{
+    return response.status(200).json(result);
+  }).catch(err=>{
+    return response.status(500).json(err);
+  })
+}

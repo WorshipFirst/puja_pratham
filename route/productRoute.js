@@ -73,4 +73,6 @@ productController.viewProductId);
 
 router.post("/add-rating-and-comment",productController.addRatting);
 
+router.post("/search-all",productController.searchAll);
+
 module.exports = router;
