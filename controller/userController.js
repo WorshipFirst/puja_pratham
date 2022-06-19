@@ -246,7 +246,7 @@ exports.registerByOtp = (request, response) => {
                         service: 'gmail',
                         auth: {
                             user: fromMail,
-                            pass: 'worship@123!'
+                            pass: 'ztrohxshjztxpobg'
                         }
                     });
 
